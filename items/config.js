@@ -4,9 +4,11 @@ import * as handlers from './handlers'
 export const getItem = {
   description: 'gets items by name',
   pre: [
-    {method: handlers.fetchItem, assign: 'fetchedItem'}
+    {method: handlers.fetchItem, assign: 'items'},
+    {method: handlers.prepareItems, assign: 'items'},
+    {method: handlers.firstItem, assign: 'items'}
   ],
-  handler: handlers.prepareItem,
+  handler: handlers.replyItems,
   tags: ['api'],
   validate: {
     params: {
@@ -17,7 +19,11 @@ export const getItem = {
 
 export const getAllItems = {
   description: 'gets all items',
-  handler: handlers.getAllItems,
+  pre: [
+    {method: handlers.getAllItems, assign: 'items'},
+    {method: handlers.prepareItems, assign: 'items'}
+  ],
+  handler: handlers.replyItems,
   tags: ['api']
 }
 
@@ -36,11 +42,13 @@ export const postItem = {
 export const patchItem = {
   description: 'modifies an existing item',
   pre: [
-    {method: handlers.fetchItem, assign: 'fetchedItem'},
-    {method: handlers.updateItem, assign: 'updateResult'},
-    {method: handlers.fetchItem, assign: 'fetchedItem'}
+    {method: handlers.fetchItem, assign: 'items'},
+    {method: handlers.firstItem, assign: 'items'},
+    {method: handlers.updateItem, assign: 'items'},
+    {method: handlers.prepareItems, assign: 'items'},
+    {method: handlers.firstItem, assign: 'items'}
   ],
-  handler: handlers.prepareItem,
+  handler: handlers.replyItems,
   tags: ['api'],
   validate: {
     params: {

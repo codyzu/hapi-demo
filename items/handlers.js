@@ -6,7 +6,7 @@ export function fetchItem (request, reply) {
 
   .then((doc) => {
     request.log('fetch', doc)
-    return doc
+    return [doc]
   })
 
   .then(reply)
@@ -17,24 +17,21 @@ export function fetchItem (request, reply) {
   })
 }
 
-export function prepareItem (request, reply) {
-  const item = _.omit(request.pre.fetchedItem, ['_rev', '_id'])
-  request.log('prepare', item)
+export function prepareItems (request, reply) {
+  const items = request.pre.items.map((doc) => _.omit(doc, ['_rev', '_id']))
+  request.log('prepare', items)
+  reply(items)
+}
+
+export function firstItem (request, reply) {
+  const item = _.head(request.pre.items)
+  request.log('fist', item)
   reply(item)
 }
 
-// export function getItem (request, reply) {
-//   return request.db.get(request.params.name)
-//
-//   .then((doc) => {
-//     reply(_.omit(doc, ['_rev', '_id']))
-//   })
-//
-//   .catch((err) => {
-//     request.log('error', err)
-//     reply(boom.wrap(err, err.status))
-//   })
-// }
+export function replyItems (reqeust, reply) {
+  reply(reqeust.pre.items)
+}
 
 export function postItem (request, reply) {
   return request.db.put(_.defaultsDeep({_id: request.payload.name}, request.payload))
@@ -52,11 +49,12 @@ export function postItem (request, reply) {
 }
 
 export function updateItem (request, reply) {
-  return request.db.put(_.merge(request.pre.fetchedItem, request.payload))
+  const item = _.merge(request.pre.items, request.payload)
+  return request.db.put(item)
 
-  .then((result) => {
-    request.log('update', result)
-    reply(result)
+  .then(() => {
+    request.log('update', item)
+    reply([item])
   })
 
   .catch((err) => {
@@ -65,23 +63,13 @@ export function updateItem (request, reply) {
   })
 }
 
-// export function patchItem (request, reply) {
-//   return request.db.put(_.merge(request.pre.fetchedItem, request.payload))
-//
-//   .then((result) => {
-//     reply(result)
-//   })
-//
-//   .catch((err) => {
-//     request.log('error', err)
-//     reply(boom.wrap(err, err.status))
-//   })
-// }
-
 export function getAllItems (request, reply) {
   return request.db.allDocs({include_docs: true})
 
+  .then((response) => response.rows.map((row) => row.doc))
+
   .then((docs) => {
+    request.log('fetchAll', docs)
     reply(docs)
   })
 

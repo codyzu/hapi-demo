@@ -1,15 +1,8 @@
 import boom from 'boom'
 import _ from 'lodash'
 
-function toId (int) {
-  const id = `items/${String(int).padStart(5, '0')}`
-  return id
-}
-
 export function fetchItem (request, reply) {
-  const id = toId(request.params.id)
-  request.log('id', id)
-  return request.db.get(id)
+  return request.db.get(`items/${request.params.name}`)
 
   .then((doc) => {
     request.log('fetch', doc)
@@ -31,6 +24,7 @@ export function prepareItems (request, reply) {
 }
 
 export function firstItem (request, reply) {
+  request.log('route', request.path)
   const item = _.head(request.pre.items)
   request.log('fist', item)
   reply(item)
@@ -55,9 +49,7 @@ export function saveRequestedItem (request, reply) {
   })
 
   .then((nextOffset) => {
-    const id = toId(nextOffset)
-    request.log('id', id)
-    newDoc = _.defaultsDeep({_id: id}, request.payload)
+    newDoc = _.defaultsDeep({_id: `items/${request.payload.name}`}, request.payload)
     request.log('new', newDoc)
     return request.db.put(newDoc)
   })
@@ -71,6 +63,9 @@ export function saveRequestedItem (request, reply) {
 }
 
 export function updateItem (request, reply) {
+  if (request.payload.name && request.payload.name !== request.params.name) {
+    return reply(boom.notAcceptable(`The 'name' cannot be changed for item '${request.params.name}'`))
+  }
   const item = _.merge(request.pre.items, request.payload)
   return request.db.put(item)
 

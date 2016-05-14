@@ -3,7 +3,7 @@ import * as itemsConfig from './config'
 export function register (server, options, next) {
   server.route({
     method: 'GET',
-    path: '/items/{id}',
+    path: '/items/{name}',
     config: itemsConfig.getItem
   })
 
@@ -21,7 +21,7 @@ export function register (server, options, next) {
 
   server.route({
     method: 'PATCH',
-    path: '/items/{id}',
+    path: '/items/{name}',
     config: itemsConfig.patchItem
   })
 

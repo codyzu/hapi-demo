@@ -1,5 +1,5 @@
-import joi from 'joi'
 import * as handlers from './handlers'
+import * as validations from './validations'
 
 export const getItem = {
   description: 'gets items by name',
@@ -12,7 +12,7 @@ export const getItem = {
   tags: ['api'],
   validate: {
     params: {
-      id: joi.number().min(0).max(99999).default(0).required()
+      name: validations.name
     }
   }
 }
@@ -37,10 +37,7 @@ export const postItem = {
   handler: handlers.replyItems,
   tags: ['api'],
   validate: {
-    payload: joi.object().keys({
-      name: joi.string().max(20).required().example('joe'),
-      description: joi.string().max(100).example('works at axway')
-    }).unknown().label('validation object')
+    payload: validations.newItem
   }
 }
 
@@ -57,11 +54,8 @@ export const patchItem = {
   tags: ['api'],
   validate: {
     params: {
-      id: joi.number().min(0).max(99999).default(0).required()
+      name: validations.name
     },
-    payload: joi.object().keys({
-      name: joi.string().max(20).example('joe'),
-      description: joi.string().max(100).example('works at axway')
-    }).unknown().label('validation object')
+    payload: validations.changeItem
   }
 }

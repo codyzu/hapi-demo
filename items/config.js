@@ -12,7 +12,7 @@ export const getItem = {
   tags: ['api'],
   validate: {
     params: {
-      name: joi.string().max(20).default('joe').required()
+      id: joi.number().min(0).max(99999).default(0).required()
     }
   }
 }
@@ -29,7 +29,12 @@ export const getAllItems = {
 
 export const postItem = {
   description: 'creates a new item',
-  handler: handlers.postItem,
+  pre: [
+    {method: handlers.saveRequestedItem, assign: 'items'},
+    {method: handlers.prepareItems, assign: 'items'},
+    {method: handlers.firstItem, assign: 'items'}
+  ],
+  handler: handlers.replyItems,
   tags: ['api'],
   validate: {
     payload: joi.object().keys({
@@ -52,7 +57,7 @@ export const patchItem = {
   tags: ['api'],
   validate: {
     params: {
-      name: joi.string().max(20).default('joe').required()
+      id: joi.number().min(0).max(99999).default(0).required()
     },
     payload: joi.object().keys({
       name: joi.string().max(20).example('joe'),

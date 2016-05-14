@@ -1,8 +1,15 @@
 import boom from 'boom'
 import _ from 'lodash'
 
+function toId (int) {
+  const id = `items/${String(int).padStart(5, '0')}`
+  return id
+}
+
 export function fetchItem (request, reply) {
-  return request.db.get(request.params.name)
+  const id = toId(request.params.id)
+  request.log('id', id)
+  return request.db.get(id)
 
   .then((doc) => {
     request.log('fetch', doc)
@@ -18,7 +25,7 @@ export function fetchItem (request, reply) {
 }
 
 export function prepareItems (request, reply) {
-  const items = request.pre.items.map((doc) => _.omit(doc, ['_rev', '_id']))
+  const items = request.pre.items.map((doc) => _.defaultsDeep({url: `${request.server.info.uri}/${doc._id}`}, _.omit(doc, ['_rev', '_id'])))
   request.log('prepare', items)
   reply(items)
 }
@@ -33,14 +40,29 @@ export function replyItems (reqeust, reply) {
   reply(reqeust.pre.items)
 }
 
-export function postItem (request, reply) {
-  return request.db.put(_.defaultsDeep({_id: request.payload.name}, request.payload))
+export function saveRequestedItem (request, reply) {
+  let newDoc
 
-  .then(() => request.db.get(request.payload.name))
-
-  .then((doc) => {
-    reply(_.omit(doc, ['_rev', '_id']))
+  request.db.allDocs({
+    startkey: 'items/',
+    endkey: 'items/\uffff',
+    limit: 0
   })
+
+  .then((result) => {
+    request.log('size', result)
+    return result.total_rows
+  })
+
+  .then((nextOffset) => {
+    const id = toId(nextOffset)
+    request.log('id', id)
+    newDoc = _.defaultsDeep({_id: id}, request.payload)
+    request.log('new', newDoc)
+    return request.db.put(newDoc)
+  })
+
+  .then(() => reply([newDoc]))
 
   .catch((err) => {
     request.log('error', err)

@@ -59,15 +59,18 @@ const manifest = {
   ]
 }
 
-glue.compose(manifest, {relativeTo: __dirname}, (err, server) => {
-  if (err) {
-    throw err
-  }
+export default new Promise((resolve, reject) => {
+  glue.compose(manifest, {relativeTo: __dirname}, (err, server) => {
+    if (err) {
+      reject(err)
+    }
 
-  server.decorate('request', 'db', new PouchDB('./db'))
+    server.decorate('request', 'db', new PouchDB('./db'))
 
-  server.start(() => {
-    console.log('SERVER RUNNING AT:', chalk.green(`${server.info.uri}/documentation`))
+    server.start(() => {
+      console.log('SERVER RUNNING AT:', chalk.green(`${server.info.uri}/documentation`))
+      resolve(server)
+    })
   })
 })
 

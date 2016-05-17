@@ -5,8 +5,9 @@
   "main": "index.js",
   "scripts": {
     "start": "babel-node index.js",
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "nodemon -w index.js -w items/ --exec npm start"
+    "test": "babel-tap -Rspec -c --cov 'test/**/test-*.js'",
+    "dev": "nodemon -w . -e js -i node_modules --exec npm test",
+    "srv": "nodemon -w . -e js -i node_modules -i test --exec npm run"
   },
   "babel": {
     "presets": [

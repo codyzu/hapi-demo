@@ -6,9 +6,9 @@ class Organizations {
   }
 
   getAllOrganizations () {
-    this.db.allDocs({
-      startkey: `organizations/`,
-      endkey: `organizations/\uffff`,
+    return this.db.allDocs({
+      startkey: 'organizations/',
+      endkey: 'organizations/\uffff',
       include_docs: true
     })
   }
@@ -19,11 +19,22 @@ class Organizations {
 
   createOrganization (doc) {
     const newOrganization = _.defaultsDeep(
-      {id: `organizations/${doc.name}`},
+      {_id: `organizations/${doc.name}`},
       doc
     )
 
+    console.log('creating', newOrganization)
+
     return this.db.put(newOrganization)
+
+    .catch((e) => {
+      console.log('create error:', e)
+      throw e
+    })
+
+    .then((x) => {
+      console.log('created', x)
+    })
 
     .then(() => newOrganization)
   }
@@ -35,7 +46,7 @@ class Contacts {
   }
 
   getOrganizationContacts (orgName) {
-    this.db.allDocs({
+    return this.db.allDocs({
       startkey: `contacts/${orgName}/`,
       endkey: `contacts/${orgName}/\uffff`,
       include_docs: true
@@ -48,7 +59,7 @@ class Contacts {
 
   createContactProfile (doc, organization) {
     const newContactProfile = _.defaultsDeep(
-      {id: `contacts/${organization.name}/${doc.name}`},
+      {_id: `contacts/${organization.name}/${doc.name}`},
       doc
     )
 

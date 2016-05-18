@@ -7,6 +7,7 @@ test('models', {autoend: true}, (fixture) => {
   // let db = new PouchDB('./db3')
   // let orgModel = models(db).organizations
   let db, orgModel
+  let count = 0
 
   fixture.beforeEach((done) => {
     console.log('creating db')
@@ -15,17 +16,20 @@ test('models', {autoend: true}, (fixture) => {
     done()
   })
 
-  fixture.afterEach(() => {
-    console.log('destroying db')
-    return db.destroy()
-    .then(() => {
-      console.log('db destroyed')
-    })
-  })
+  // fixture.afterEach(function(done) {
+  //   console.log('destroying db')
+  //   console.log(done)
+  //   db.destroy()
+  //   .then((res) => {
+  //     console.log('db destroyed', res, count)
+  //     count += 1
+  //     done()
+  //   })
+  // })
 
   // fixture.plan(2)
 
-  return fixture.test('creates organizations', (t) => {
+  fixture.test('creates organizations', (t) => {
     return orgModel.createOrganization({
       name: 'axway',
       description: 'this is a description'
@@ -40,11 +44,11 @@ test('models', {autoend: true}, (fixture) => {
     })
   })
 
-  .then(() => fixture.test('lists all organizations', (t) => {
+  fixture.test('lists all organizations', (t) => {
     t.plan(1)
     console.log('starting')
     const expectedOrgs = [
-      {name: 'axway', description: 'software supplier'},
+      {name: 'axway2', description: 'software supplier'},
       {name: 'sopra', description: 'services supplier'}
     ]
 
@@ -75,7 +79,7 @@ test('models', {autoend: true}, (fixture) => {
     })
 
     .catch(t.threw)
-  }))
+  })
 
   console.log('DONE')
   // fixture.end()

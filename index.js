@@ -1,9 +1,8 @@
-// import hapi from 'hapi'
 import PouchDB from 'pouchdb'
-// import jsome from 'jsome'
 import glue from 'glue'
 import chalk from 'chalk'
 import pack from './package.json'
+import models from './models'
 
 const manifest = {
   // hapi server options
@@ -55,60 +54,25 @@ const manifest = {
         }
       }
     },
-    {plugin: './items'}
+    // {plugin: './items'},
+    {plugin: './organizations'}
   ]
 }
 
 export default new Promise((resolve, reject) => {
   glue.compose(manifest, {relativeTo: __dirname}, (err, server) => {
     if (err) {
+      console.error('Error configuring server:', err)
       reject(err)
     }
 
-    server.decorate('request', 'db', new PouchDB('./db'))
+    const db = new PouchDB('mydb')
+    // server.decorate('request', 'db', db)
+    server.decorate('request', 'models', models(db))
 
     server.start(() => {
-      console.log('SERVER RUNNING AT:', chalk.green(`${server.info.uri}/documentation`))
+      server.log('info', 'SERVER RUNNING AT: ' + chalk.green(`${server.info.uri}/documentation`))
       resolve(server)
     })
   })
 })
-
-// // const pouch = new PouchDB('./db')
-// const pouch = new PouchDB('http://localhost:5984/testdb')
-//
-// // pouch.put({
-// //   _id: 'cody1',
-// //   description: 'this is codys first document',
-// //   count: 1
-// // })
-// //
-// // .then(() => pouch.allDocs({include_docs: true}))
-//
-// // pouch.allDocs({include_docs: true})
-//
-// pouch.get('cody1')
-//
-// .then((results) => {
-//   console.log('get 1:')
-//   jsome(results)
-//   return results
-// })
-//
-// // .then(() => pouch.get('cody1'))
-//
-// .then((doc) => {
-//   doc.count = doc.count + 1
-//   return pouch.put(doc)
-// })
-//
-// .then(() => pouch.get('cody1'))
-//
-// .then((doc) => {
-//   console.log('get 2:')
-//   jsome(doc)
-// })
-//
-// .catch((err) => {
-//   console.error(err)
-// })

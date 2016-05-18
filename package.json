@@ -7,7 +7,7 @@
     "start": "babel-node index.js",
     "test": "babel-tap -Rspec -c --cov 'test/**/test-*.js'",
     "dev": "nodemon -w . -e js -i node_modules --exec npm test",
-    "srv": "nodemon -w . -e js -i node_modules -i test --exec npm run"
+    "srv": "nodemon -w . -e js -i node_modules -i test --exec npm start"
   },
   "babel": {
     "presets": [

@@ -48,10 +48,6 @@ class Organizations {
   }
 }
 
-// function idToUrl (doc) {
-//   doc.url = _id
-// }
-
 class Contacts {
   constructor (db) {
     this.db = db

@@ -11,6 +11,8 @@ class Organizations {
       endkey: 'organizations/\uffff',
       include_docs: true
     })
+
+    .then((results) => results.rows.map((r) => r.doc))
   }
 
   getOrganizationByName (orgName) {
@@ -23,22 +25,32 @@ class Organizations {
       doc
     )
 
-    console.log('creating', newOrganization)
-
     return this.db.put(newOrganization)
-
-    .catch((e) => {
-      console.log('create error:', e)
-      throw e
-    })
-
-    .then((x) => {
-      console.log('created', x)
-    })
 
     .then(() => newOrganization)
   }
+
+  updateOrganization (name, changes) {
+    if (changes.name && changes.name !== name) {
+      throw new Error(`Cannot rename orgainzation ${name}`)
+    }
+
+    let updatedOrganization
+
+    return this.getOrganizationByName(name)
+
+    .then((org) => {
+      updatedOrganization = _.merge(org, changes)
+      this.db.put(updatedOrganization)
+    })
+
+    .then(() => updatedOrganization)
+  }
 }
+
+// function idToUrl (doc) {
+//   doc.url = _id
+// }
 
 class Contacts {
   constructor (db) {

@@ -4,83 +4,79 @@ import memdown from 'memdown'
 import {test} from 'tap'
 
 test('models', {autoend: true}, (fixture) => {
-  // let db = new PouchDB('./db3')
-  // let orgModel = models(db).organizations
-  let db, orgModel
-  let count = 0
+  let db = new PouchDB('testdb', {db: memdown})
+  let orgModel = models(db).organizations
 
-  fixture.beforeEach((done) => {
-    console.log('creating db')
-    db = new PouchDB('testdb', {db: memdown})
-    orgModel = models(db).organizations
-    done()
-  })
+  const expectedOrg = {
+    name: 'axway',
+    description: 'this is a description'
+  }
 
-  // fixture.afterEach(function(done) {
-  //   console.log('destroying db')
-  //   console.log(done)
-  //   db.destroy()
-  //   .then((res) => {
-  //     console.log('db destroyed', res, count)
-  //     count += 1
-  //     done()
-  //   })
-  // })
-
-  // fixture.plan(2)
-
-  fixture.test('creates organizations', (t) => {
-    return orgModel.createOrganization({
-      name: 'axway',
-      description: 'this is a description'
-    })
-
-    .then((newOrg) => {
-      return orgModel.getAllOrganizations()
-    })
-
-    .then((allOrgs) => {
-      t.done()
-    })
-  })
-
-  fixture.test('lists all organizations', (t) => {
+  fixture.test('starts empty', (t) => {
     t.plan(1)
-    console.log('starting')
-    const expectedOrgs = [
-      {name: 'axway2', description: 'software supplier'},
-      {name: 'sopra', description: 'services supplier'}
-    ]
 
-    // const promises = expectedOrgs.map((org) => orgModel.createOrganization(org))
-    // console.log('promises', promises)
-    //
-    // return Promise.all(promises)
-
-    return orgModel.createOrganization(expectedOrgs[0])
-
-    // .then(() => orgModel.createOrganization(expectedOrgs[1]))
-
-    .catch((err) => {
-      console.log('error', err)
-    })
+    return orgModel.getAllOrganizations()
 
     .then((orgs) => {
-      console.log('created')
-      console.log('ORGS:', orgs)
-      return orgModel.getAllOrganizations()
-    })
-
-    .then((allOrgs) => {
-      console.log('ORGS:', allOrgs)
-      t.ok(1, 'its ok')
-      console.log('done')
-      t.done()
+      t.equal(0, orgs.length, 'starts empty')
     })
 
     .catch(t.threw)
   })
 
-  console.log('DONE')
-  // fixture.end()
+  fixture.test('creating organization returns created org', (t) => {
+    t.plan(2)
+
+    return orgModel.createOrganization(expectedOrg)
+
+    .then((actualOrg) => {
+      t.equal(actualOrg.name, expectedOrg.name, 'correct name')
+      t.equal(actualOrg.description, expectedOrg.description, 'correct description')
+    })
+
+    .catch(t.threw)
+  })
+
+  fixture.test('lists all organizations', (t) => {
+    t.plan(3)
+
+    return orgModel.getAllOrganizations()
+
+    .then((allOrgs) => {
+      t.equal(allOrgs.length, 1, 'legnth of 1')
+      const actualOrg = allOrgs[0]
+      t.equal(actualOrg.name, expectedOrg.name, 'correct name')
+      t.equal(actualOrg.description, expectedOrg.description, 'correct description')
+    })
+
+    .catch(t.threw)
+  })
+
+  fixture.test('get organization by name', (t) => {
+    t.plan(2)
+
+    return orgModel.getOrganizationByName(expectedOrg.name)
+
+    .then((actualOrg) => {
+      t.equal(actualOrg.name, expectedOrg.name, 'correct name')
+      t.equal(actualOrg.description, expectedOrg.description, 'correct description')
+    })
+
+    .catch(t.threw)
+  })
+
+  fixture.test('update organization', (t) => {
+    t.plan(2)
+
+    const modifications = {description: 'a new description'}
+
+    return orgModel.updateOrganization(expectedOrg.name, modifications)
+
+    .then((actualOrg) => {
+      t.equal(actualOrg.name, expectedOrg.name, 'correct name')
+      t.equal(actualOrg.description, modifications.description, 'correct description')
+    })
+
+    .catch(t.threw)
+  })
 })

@@ -37,7 +37,7 @@ export const postOrg = {
   handler: handlers.replyOrgs,
   tags: ['api'],
   validate: {
-    payload: validations.newItem
+    payload: validations.newOrg
   }
 }
 

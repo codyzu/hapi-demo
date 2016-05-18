@@ -24,7 +24,7 @@ export function replyOrgs (reqeust, reply) {
 }
 
 export function saveOrg (request, reply) {
-  return request.models.org.createOrganization(request.payload)
+  return request.models.organizations.createOrganization(request.payload)
 
   .then((org) => reply([org]))
 

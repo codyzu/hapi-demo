@@ -28,6 +28,26 @@ server.route({
   }
 })
 
+server.route({
+  method: 'POST',
+  path: '/',
+  handler: (request, reply) => {
+    console.log(`posting ${request.payload}`)
+    reply(request.payload).code(201)
+  },
+  config: {
+    validate: {
+      payload: joi.object({
+        name: joi.string().max(10).required(),
+        email: joi.string().email().required()
+      }).unknown(),
+      options: {
+        stripUnknown: true
+      }
+    }
+  }
+})
+
 server.start((err) => {
   if (err) {
     throw err

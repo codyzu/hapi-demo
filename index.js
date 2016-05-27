@@ -4,11 +4,14 @@ import joi from 'joi'
 const server = new hapi.Server()
 server.connection({port: 3000})
 
+const db = {}
+
 server.route({
   method: 'GET',
   path: '/',
   handler: (request, reply) => {
-    reply('Hello world!')
+    console.log('GET ALL:', db)
+    reply(db)
   }
 })
 
@@ -16,8 +19,8 @@ server.route({
   method: 'GET',
   path: '/{name}',
   handler: (request, reply) => {
-    console.log(`hello ${request.params.name}!`)
-    reply(`hello ${request.params.name}!`)
+    console.log('GET', request.params.name, db[request.params.db])
+    reply(db[request.params.name])
   },
   config: {
     validate: {
@@ -32,7 +35,8 @@ server.route({
   method: 'POST',
   path: '/',
   handler: (request, reply) => {
-    console.log(`posting ${request.payload}`)
+    console.log('POST', request.payload)
+    db[request.payload.name] = request.payload
     reply(request.payload).code(201)
   },
   config: {

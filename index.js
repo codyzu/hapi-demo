@@ -17,6 +17,7 @@ server.route({
   path: '/{name}',
   handler: (request, reply) => {
     console.log(`hello ${request.params.name}!`)
+    reply(`hello ${request.params.name}!`)
   },
   config: {
     validate: {

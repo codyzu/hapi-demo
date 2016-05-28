@@ -10,8 +10,9 @@ server.route({
   method: 'GET',
   path: '/',
   handler: (request, reply) => {
-    console.log('GET ALL:', db)
-    reply(db)
+    const orgs = Object.values(db)
+    console.log('GET ALL:', orgs)
+    reply(orgs)
   }
 })
 

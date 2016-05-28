@@ -1,10 +1,7 @@
-import hapi from 'hapi'
-import orgs from './orgs'
+import config from './config'
+import glue from 'glue'
 
-const server = new hapi.Server()
-server.connection({port: 3000})
-
-server.register(orgs, (err) => {
+glue.compose(config, {relativeTo: __dirname}, (err, server) => {
   if (err) {
     throw err
   }

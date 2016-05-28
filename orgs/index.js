@@ -3,7 +3,7 @@ import pack from '../package.json'
 
 const db = {}
 
-export default function register (server, options, next) {
+export function register (server, options, next) {
   server.route({
     method: 'GET',
     path: '/',

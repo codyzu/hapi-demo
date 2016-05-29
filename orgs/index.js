@@ -6,7 +6,7 @@ const db = {}
 export function register (server, options, next) {
   server.route({
     method: 'GET',
-    path: '/',
+    path: '/orgs',
     handler: (request, reply) => {
       const orgs = Object.values(db)
       console.log('GET ALL:', orgs)
@@ -17,7 +17,7 @@ export function register (server, options, next) {
 
   server.route({
     method: 'GET',
-    path: '/{name}',
+    path: '/orgs/{name}',
     handler: (request, reply) => {
       console.log('GET', request.params.name, db[request.params.name])
       reply(db[request.params.name])
@@ -34,7 +34,7 @@ export function register (server, options, next) {
 
   server.route({
     method: 'POST',
-    path: '/',
+    path: '/orgs',
     handler: (request, reply) => {
       console.log('POST', request.payload)
       db[request.payload.name] = request.payload

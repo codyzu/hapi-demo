@@ -12,7 +12,15 @@ export function register (server, options, next) {
       console.log('GET ALL:', orgs)
       reply(orgs)
     },
-    config: {tags: ['api']}
+    config: {
+      tags: ['api'],
+      response: {
+        schema: joi.array().items(joi.object({
+          name: joi.string().max(10).required(),
+          email: joi.string().email().required()
+        }).unknown())
+      }
+    }
   })
 
   server.route({
@@ -28,6 +36,12 @@ export function register (server, options, next) {
         params: {
           name: joi.string().max(10)
         }
+      },
+      response: {
+        schema: joi.object({
+          name: joi.string().max(10).required(),
+          email: joi.string().email().required()
+        }).unknown()
       }
     }
   })

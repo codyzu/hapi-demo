@@ -40,7 +40,7 @@ export default {
     {
       plugin: './orgs',
       options: {
-        routes: {prefix: '/api/v1'}
+        routes: {prefix: '/orgs'}
       }
     }
   ]

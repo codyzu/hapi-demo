@@ -13,17 +13,9 @@ export default {
       plugin: {
         register: 'good',
         options: {
-          ops: {interval: 1000},
+          ops: {interval: 60000},
           reporters: {
-            console: [
-              {
-                module: 'good-squeeze',
-                name: 'Squeeze',
-                args: [{ log: '*', response: '*', error: '*', request: '*' }]
-              },
-              {module: 'good-console'},
-              'stdout'
-            ]
+            console: [{module: 'good-console'}, 'stdout']
           }
         }
       }

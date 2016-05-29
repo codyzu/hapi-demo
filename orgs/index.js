@@ -1,5 +1,6 @@
 import joi from 'joi'
 import pack from '../package.json'
+import * as validations from './validations'
 
 const db = {}
 
@@ -15,10 +16,7 @@ export function register (server, options, next) {
     config: {
       tags: ['api'],
       response: {
-        schema: joi.array().items(joi.object({
-          name: joi.string().max(10).required(),
-          email: joi.string().email().required()
-        }).unknown())
+        schema: validations.orgList
       }
     }
   })
@@ -37,12 +35,7 @@ export function register (server, options, next) {
           name: joi.string().max(10)
         }
       },
-      response: {
-        schema: joi.object({
-          name: joi.string().max(10).required(),
-          email: joi.string().email().required()
-        }).unknown()
-      }
+      response: {schema: validations.org}
     }
   })
 
@@ -57,14 +50,12 @@ export function register (server, options, next) {
     config: {
       tags: ['api'],
       validate: {
-        payload: joi.object({
-          name: joi.string().max(10).required(),
-          email: joi.string().email().required()
-        }).unknown(),
+        payload: validations.org,
         options: {
           stripUnknown: true
         }
-      }
+      },
+      response: {schema: validations.org}
     }
   })
 

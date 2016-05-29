@@ -11,7 +11,8 @@ export function register (server, options, next) {
       const orgs = Object.values(db)
       console.log('GET ALL:', orgs)
       reply(orgs)
-    }
+    },
+    config: {tags: ['api']}
   })
 
   server.route({
@@ -22,6 +23,7 @@ export function register (server, options, next) {
       reply(db[request.params.name])
     },
     config: {
+      tags: ['api'],
       validate: {
         params: {
           name: joi.string().max(10)
@@ -39,6 +41,7 @@ export function register (server, options, next) {
       reply(request.payload).code(201)
     },
     config: {
+      tags: ['api'],
       validate: {
         payload: joi.object({
           name: joi.string().max(10).required(),

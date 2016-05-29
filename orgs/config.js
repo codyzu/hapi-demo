@@ -1,5 +1,4 @@
 import * as validations from './validations'
-import joi from 'joi'
 
 const db = {}
 
@@ -19,7 +18,7 @@ export const getByName = {
   tags: ['api'],
   validate: {
     params: {
-      name: joi.string().max(10)
+      name: validations.name
     }
   },
   response: {schema: validations.org},

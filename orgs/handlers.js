@@ -13,8 +13,7 @@ export function getAll (request, reply) {
 export function getByName (request, reply) {
   const orgName = request.params.name
   request.models.orgs.getOrg(orgName)
-  .then((doc) => {
-    const org = prepareOrg(doc)
+  .then((org) => {
     console.log('GET:', org)
     reply(org)
   })
@@ -30,6 +29,7 @@ export function postNew (request, reply) {
   .catch((err) => reply(boom.wrap(err, err.status)))
 }
 
-function prepareOrg(doc) {
-  return defaultsDeep({url: `${request.server.info.uri}/${doc._id}`}, omit(doc, ['_id', '_rev']))
+export function prepareOrg (request, reply) {
+  console.log('PREPARING')
+  reply(defaultsDeep({url: `${request.server.info.uri}/${request.pre.org._id}`}, omit(request.pre.org, ['_id', '_rev'])))
 }

@@ -17,7 +17,10 @@ export const getByName = {
     }
   },
   response: {schema: validations.org},
-  handler: handlers.getByName
+  pre: [
+    {method: handlers.getByName, assign: 'org'}
+  ],
+  handler: handlers.prepareOrg
 }
 
 export const postNew = {

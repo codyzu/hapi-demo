@@ -14,7 +14,7 @@ export function getByName (request, reply) {
   const orgName = request.params.name
   request.models.orgs.getOrg(orgName)
   .then((doc) => {
-    const org = defaultsDeep({url: `${request.server.info.uri}/${doc._id}`}, omit(doc, ['_id', '_rev']))
+    const org = prepareOrg(doc)
     console.log('GET:', org)
     reply(org)
   })
@@ -28,4 +28,8 @@ export function postNew (request, reply) {
     reply(org).code(201)
   })
   .catch((err) => reply(boom.wrap(err, err.status)))
+}
+
+function prepareOrg(doc) {
+  return defaultsDeep({url: `${request.server.info.uri}/${doc._id}`}, omit(doc, ['_id', '_rev']))
 }

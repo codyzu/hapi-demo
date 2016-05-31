@@ -1,9 +1,11 @@
 const db = {}
 
 export function getAll (request, reply) {
-  const orgs = Object.values(db)
-  console.log('GET ALL:', orgs)
-  reply(orgs)
+  request.models.orgs.listOrgs()
+  .then((orgs) => {
+    console.log('GET ALL:', orgs)
+    reply(orgs)
+  })
 }
 
 export function getByName (request, reply) {

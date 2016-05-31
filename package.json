@@ -7,7 +7,7 @@
     "start": "babel-node index.js",
     "test": "tape -r babel-register 'test/**/test*.js' | tap-spec",
     "dev": "nodemon -w . --exec npm test",
-    "srv": "nodemon -w . -e js -i node_modules -i test --exec npm start"
+    "srv": "nodemon -w . -i test --exec npm start"
   },
   "babel": {
     "presets": [

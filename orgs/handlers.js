@@ -1,10 +1,12 @@
+import boom from 'boom'
+
 export function getAllOrgs (request, reply) {
   request.models.orgs.listOrgs()
   .then((orgs) => {
     console.log('GET ALL:', orgs)
     reply(orgs)
   })
-  .catch(reply)
+  .catch((err) => reply(boom.wrap(err, err.status)))
 }
 
 export function getOrgByName (request, reply) {
@@ -14,7 +16,7 @@ export function getOrgByName (request, reply) {
     console.log('GET:', org)
     reply(org)
   })
-  .catch(reply)
+  .catch((err) => reply(boom.wrap(err, err.status)))
 }
 
 export function postOrg (request, reply) {
@@ -23,5 +25,5 @@ export function postOrg (request, reply) {
     console.log('CREATED:', org)
     reply(org).code(201)
   })
-  .catch(reply)
+  .catch((err) => reply(boom.wrap(err, err.status)))
 }

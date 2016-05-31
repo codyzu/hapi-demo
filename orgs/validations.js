@@ -1,6 +1,6 @@
 import joi from 'joi'
 
-export const name = joi.string().max(10).required().example('Axway')
+export const name = joi.string().max(10).required().example('Axway').default('Axway')
 
 export const org = joi.object({
   name,

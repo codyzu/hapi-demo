@@ -1,4 +1,5 @@
 import boom from 'boom'
+import {defaultsDeep, omit} from 'lodash'
 
 export function getAll (request, reply) {
   request.models.orgs.listOrgs()
@@ -12,7 +13,8 @@ export function getAll (request, reply) {
 export function getByName (request, reply) {
   const orgName = request.params.name
   request.models.orgs.getOrg(orgName)
-  .then((org) => {
+  .then((doc) => {
+    const org = defaultsDeep({url: `${request.server.info.uri}/${doc._id}`}, omit(doc, ['_id', '_rev']))
     console.log('GET:', org)
     reply(org)
   })

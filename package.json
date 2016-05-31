@@ -5,8 +5,8 @@
   "main": "index.js",
   "scripts": {
     "start": "babel-node index.js",
-    "test": "babel-tap -Rspec -c --cov 'test/**/test-*.js'",
-    "dev": "nodemon -w . -e js -i node_modules --exec npm test",
+    "test": "tape -r babel-register 'test/**/test*.js' | tap-spec",
+    "dev": "nodemon -w . --exec npm test",
     "srv": "nodemon -w . -e js -i node_modules -i test --exec npm start"
   },
   "babel": {
@@ -38,8 +38,9 @@
     "vision": "^4.1.0"
   },
   "devDependencies": {
+    "blue-tape": "^0.2.0",
     "nodemon": "^1.9.2",
-    "tap-spec": "^4.1.1",
-    "tape": "^4.5.1"
+    "request-promise": "^3.0.0",
+    "tap-spec": "^4.1.1"
   }
 }

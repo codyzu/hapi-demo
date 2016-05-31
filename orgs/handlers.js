@@ -1,5 +1,3 @@
-const db = {}
-
 export function getAll (request, reply) {
   request.models.orgs.listOrgs()
   .then((orgs) => {
@@ -9,12 +7,18 @@ export function getAll (request, reply) {
 }
 
 export function getByName (request, reply) {
-  console.log('GET', request.params.name, db[request.params.name])
-  reply(db[request.params.name])
+  const orgName = request.params.name
+  request.models.orgs.getOrg(orgName)
+  .then((org) => {
+    console.log('GET:', org)
+    reply(org)
+  })
 }
 
 export function postNew (request, reply) {
-  console.log('POST', request.payload)
-  db[request.payload.name] = request.payload
-  reply(request.payload).code(201)
+  request.models.orgs.createOrg(request.payload)
+  .then((org) => {
+    console.log('CREATED:', org)
+    reply(org).code(201)
+  })
 }

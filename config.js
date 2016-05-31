@@ -37,7 +37,7 @@ export default {
       }
     },
     {plugin: 'blipp'},
-    {plugin: './models'},
+    {plugin: {register: './models', options: {connection: {name: './orgsdb'}}}},
     {plugin: './orgs'}
   ]
 }

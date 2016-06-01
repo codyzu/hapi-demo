@@ -7,9 +7,10 @@ export const getAll = {
     schema: validations.orgList
   },
   pre: [
-    {method: handlers.fetchAllOrgs, assign: 'orgs'}
+    {method: handlers.fetchAllOrgs, assign: 'orgs'},
+    {method: handlers.prepareOrgs, assign: 'orgs'}
   ],
-  handler: handlers.prepareOrgs
+  handler: handlers.replyOk
 }
 
 export const getByName = {
@@ -22,9 +23,10 @@ export const getByName = {
   response: {schema: validations.org},
   pre: [
     {method: handlers.fetchOrg, assign: 'orgs'},
-    {method: handlers.prepareOrgs, assign: 'orgs'}
+    {method: handlers.prepareOrgs, assign: 'orgs'},
+    {method: handlers.firstOrg, assign: 'orgs'}
   ],
-  handler: handlers.firstOrg
+  handler: handlers.replyOk
 }
 
 export const postNew = {
@@ -38,7 +40,8 @@ export const postNew = {
   response: {schema: validations.org},
   pre: [
     {method: handlers.createOrg, assign: 'orgs'},
-    {method: handlers.prepareOrgs, assign: 'orgs'}
+    {method: handlers.prepareOrgs, assign: 'orgs'},
+    {method: handlers.firstOrg, assign: 'orgs'}
   ],
-  handler: handlers.firstOrg
+  handler: handlers.replyCreated
 }

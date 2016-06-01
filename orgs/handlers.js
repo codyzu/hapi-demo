@@ -24,7 +24,7 @@ export function createOrg (request, reply) {
   console.log('CREATING')
   request.models.orgs.createOrg(request.payload)
   .then((org) => {
-    reply([org]).code(201)
+    reply([org])
   })
   .catch((err) => reply(boom.wrap(err, err.status)))
 }
@@ -37,4 +37,14 @@ export function prepareOrgs (request, reply) {
 export function firstOrg (request, reply) {
   console.log('FIRST ORG')
   reply(request.pre.orgs[0])
+}
+
+export function replyOk (request, reply) {
+  console.log('OK')
+  reply(request.pre.orgs).code(200)
+}
+
+export function replyCreated (request, reply) {
+  console.log('CREATED')
+  reply(request.pre.orgs).code(201)
 }

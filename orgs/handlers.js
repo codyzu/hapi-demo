@@ -29,7 +29,23 @@ export function postNew (request, reply) {
   .catch((err) => reply(boom.wrap(err, err.status)))
 }
 
-export function prepareOrg (request, reply) {
+export function fetchOrg (request, reply) {
+
+}
+
+export function fetchAllOrgs (request, reply) {
+
+}
+
+export function createOrg (request, reply) {
+
+}
+
+export function prepareOrgs (request, reply) {
   console.log('PREPARING')
   reply(defaultsDeep({url: `${request.server.info.uri}/${request.pre.org._id}`}, omit(request.pre.org, ['_id', '_rev'])))
+}
+
+export function firstOrg (request, reply) {
+
 }

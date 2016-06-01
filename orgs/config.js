@@ -20,7 +20,7 @@ export const getByName = {
   pre: [
     {method: handlers.getByName, assign: 'org'}
   ],
-  handler: handlers.prepareOrg
+  handler: handlers.prepareOrgs
 }
 
 export const postNew = {

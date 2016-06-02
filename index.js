@@ -14,7 +14,7 @@ server.route({
 
 server.route({
   method: 'GET',
-  path: '/{name}',
+  path: '/orgs/{name}',
   handler: (request, reply) => {
     console.log(`hello ${request.params.name}!`)
   },

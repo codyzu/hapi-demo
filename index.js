@@ -36,6 +36,6 @@ glue.compose(config, {relativeTo: __dirname}, (err, server) => {
       }
     })
 
-    console.log(`Server running at: ${server.info.uri}`)
+    console.log(`Server running. Swagger UI at: ${server.info.uri}/documentation`)
   })
 })

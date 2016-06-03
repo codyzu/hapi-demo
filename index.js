@@ -15,6 +15,7 @@ glue.compose(config, {relativeTo: __dirname}, (err, server) => {
     server.route({
       method: 'GET',
       path: '/',
+      config: {tags: ['api']},
       handler: (request, reply) => {
         reply('Hello world!')
       }
@@ -28,6 +29,7 @@ glue.compose(config, {relativeTo: __dirname}, (err, server) => {
         reply(`hello ${request.params.name}!`)
       },
       config: {
+        tags: ['api'],
         validate: {
           params: {
             name: joi.string().max(10)

@@ -38,6 +38,18 @@ glue.compose(config, {relativeTo: __dirname}, (err, server) => {
       }
     })
 
+    server.route({
+      method: 'POST',
+      path: '/orgs',
+      handler: (request, reply) => {
+        console.log(`posting ${request.payload}`)
+        reply(request.payload).code(201)
+      },
+      config: {
+        tags: ['api']
+      }
+    })
+
     console.log(`Server running. Swagger UI at: ${server.info.uri}/documentation`)
   })
 })

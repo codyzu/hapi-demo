@@ -46,7 +46,16 @@ glue.compose(config, {relativeTo: __dirname}, (err, server) => {
         reply(request.payload).code(201)
       },
       config: {
-        tags: ['api']
+        tags: ['api'],
+        validate: {
+          payload: joi.object({
+            name: joi.string().max(10).required(),
+            email: joi.string().email().required()
+          }).unknown(),
+          options: {
+            stripUnknown: true
+          }
+        }
       }
     })
 

@@ -6,7 +6,10 @@ export const getAll = {
   response: {
     schema: validations.orgList
   },
-  handler: handlers.getAllOrgs
+  pre: [
+    {method: handlers.fetchAllOrgs, assign: 'orgs'}
+  ],
+  handler: handlers.prepareOrgs
 }
 
 export const getByName = {
@@ -18,9 +21,10 @@ export const getByName = {
   },
   response: {schema: validations.org},
   pre: [
-    {method: handlers.getOrgByName, assign: 'org'}
+    {method: handlers.fetchOrg, assign: 'orgs'},
+    {method: handlers.prepareOrgs, assign: 'orgs'}
   ],
-  handler: handlers.prepareOrgs
+  handler: handlers.firstOrg
 }
 
 export const post = {
@@ -31,8 +35,10 @@ export const post = {
       stripUnknown: true
     }
   },
-  response: {
-    schema: validations.org
-  },
-  handler: handlers.postOrg
+  response: {schema: validations.org},
+  pre: [
+    {method: handlers.createOrg, assign: 'orgs'},
+    {method: handlers.prepareOrgs, assign: 'orgs'}
+  ],
+  handler: handlers.firstOrg
 }

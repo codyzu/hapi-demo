@@ -16,10 +16,11 @@ export const getByName = {
       name: validations.name
     }
   },
-  response: {
-    schema: validations.org
-  },
-  handler: handlers.getOrgByName
+  response: {schema: validations.org},
+  pre: [
+    {method: handlers.getOrgByName, assign: 'org'}
+  ],
+  handler: handlers.prepareOrg
 }
 
 export const post = {

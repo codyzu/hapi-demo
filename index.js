@@ -27,7 +27,9 @@ glue.compose(config, {relativeTo: __dirname}, (err, server) => {
       method: 'GET',
       path: '/orgs',
       handler: (request, reply) => {
-        reply('GET ALL')
+        const orgs = Object.values(db)
+        console.log('GET ALL:', orgs)
+        reply(orgs)
       },
       config: {
         tags: ['api']
@@ -38,8 +40,9 @@ glue.compose(config, {relativeTo: __dirname}, (err, server) => {
       method: 'GET',
       path: '/orgs/{name}',
       handler: (request, reply) => {
-        console.log(`hello ${request.params.name}!`)
-        reply(`hello ${request.params.name}!`)
+        const org = db[request.params.name]
+        console.log('GET', request.params.name, org)
+        reply(org)
       },
       config: {
         tags: ['api'],

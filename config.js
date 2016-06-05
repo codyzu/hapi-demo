@@ -37,11 +37,6 @@ export default {
       }
     },
     {plugin: 'blipp'},
-    {
-      plugin: './orgs',
-      options: {
-        routes: {prefix: '/v1'}
-      }
-    }
+    {plugin: './orgs'}
   ]
 }

@@ -1,10 +1,8 @@
-import PouchDb from 'pouchdb'
-import memdown from 'memdown'
 import {defaultsDeep} from 'lodash'
 
 export default class Orgs {
-  constructor () {
-    this.db = new PouchDb({name: 'orgs', db: memdown})
+  constructor (db) {
+    this.db = db
   }
 
   createOrg (org) {

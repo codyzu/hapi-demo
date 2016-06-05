@@ -25,7 +25,7 @@ export const getByName = {
 export const post = {
   tags: ['api'],
   validate: {
-    payload: validations.org,
+    payload: validations.newOrg,
     options: {
       stripUnknown: true
     }

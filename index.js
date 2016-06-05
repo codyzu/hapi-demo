@@ -2,6 +2,8 @@ import joi from 'joi'
 import config from './config'
 import glue from 'glue'
 
+const db = {}
+
 glue.compose(config, {relativeTo: __dirname}, (err, server) => {
   if (err) {
     throw err
@@ -18,6 +20,17 @@ glue.compose(config, {relativeTo: __dirname}, (err, server) => {
       config: {tags: ['api']},
       handler: (request, reply) => {
         reply('Hello world!')
+      }
+    })
+
+    server.route({
+      method: 'GET',
+      path: '/orgs',
+      handler: (request, reply) => {
+        reply('GET ALL')
+      },
+      config: {
+        tags: ['api']
       }
     })
 
@@ -42,7 +55,8 @@ glue.compose(config, {relativeTo: __dirname}, (err, server) => {
       method: 'POST',
       path: '/orgs',
       handler: (request, reply) => {
-        console.log(`posting ${request.payload}`)
+        console.log('POST', request.payload)
+        db[request.payload.name] = request.payload
         reply(request.payload).code(201)
       },
       config: {

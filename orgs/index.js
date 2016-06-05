@@ -25,5 +25,6 @@ export function register (server, options, next) {
 
 register.attributes = {
   name: 'orgs',
-  version: pack.version
+  version: pack.version,
+  dependencies: ['models']
 }

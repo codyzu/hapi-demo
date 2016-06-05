@@ -32,7 +32,15 @@ glue.compose(config, {relativeTo: __dirname}, (err, server) => {
         reply(orgs)
       },
       config: {
-        tags: ['api']
+        tags: ['api'],
+        response: {
+          schema: joi.array().items(
+            joi.object({
+              name: joi.string().max(10).required(),
+              email: joi.string().email().required()
+            }).unknown())
+          .example([{name: 'Axway', email: 'cody@email.com'}])
+        }
       }
     })
 
@@ -48,8 +56,14 @@ glue.compose(config, {relativeTo: __dirname}, (err, server) => {
         tags: ['api'],
         validate: {
           params: {
-            name: joi.string().max(10)
+            name: joi.string().max(10).default('Axway')
           }
+        },
+        response: {
+          schema: joi.object({
+            name: joi.string().max(10).required().example('Axway'),
+            email: joi.string().email().required().example('cody@email.com')
+          }).unknown()
         }
       }
     })
@@ -66,12 +80,18 @@ glue.compose(config, {relativeTo: __dirname}, (err, server) => {
         tags: ['api'],
         validate: {
           payload: joi.object({
-            name: joi.string().max(10).required(),
-            email: joi.string().email().required()
+            name: joi.string().max(10).required().example('Axway'),
+            email: joi.string().email().required().example('cody@email.com')
           }).unknown(),
           options: {
             stripUnknown: true
           }
+        },
+        response: {
+          schema: joi.object({
+            name: joi.string().max(10).required().example('Axway'),
+            email: joi.string().email().required().example('cody@email.com')
+          }).unknown()
         }
       }
     })

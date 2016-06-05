@@ -36,6 +36,7 @@ export default {
         }
       }
     },
-    {plugin: 'blipp'}
+    {plugin: 'blipp'},
+    {plugin: './orgs'}
   ]
 }

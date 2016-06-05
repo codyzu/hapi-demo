@@ -1,15 +1,10 @@
-import joi from 'joi'
 import * as handlers from './handlers'
+import * as validations from './validations'
 
 export const getAll = {
   tags: ['api'],
   response: {
-    schema: joi.array().items(
-      joi.object({
-        name: joi.string().max(10).required(),
-        email: joi.string().email().required()
-      }).unknown())
-    .example([{name: 'Axway', email: 'cody@email.com'}])
+    schema: validations.orgList
   },
   handler: handlers.getAllOrgs
 }
@@ -18,14 +13,11 @@ export const getByName = {
   tags: ['api'],
   validate: {
     params: {
-      name: joi.string().max(10).default('Axway')
+      name: validations.name
     }
   },
   response: {
-    schema: joi.object({
-      name: joi.string().max(10).required().example('Axway'),
-      email: joi.string().email().required().example('cody@email.com')
-    }).unknown()
+    schema: validations.org
   },
   handler: handlers.getOrgByName
 }
@@ -33,19 +25,13 @@ export const getByName = {
 export const post = {
   tags: ['api'],
   validate: {
-    payload: joi.object({
-      name: joi.string().max(10).required().example('Axway'),
-      email: joi.string().email().required().example('cody@email.com')
-    }).unknown(),
+    payload: validations.org,
     options: {
       stripUnknown: true
     }
   },
   response: {
-    schema: joi.object({
-      name: joi.string().max(10).required().example('Axway'),
-      email: joi.string().email().required().example('cody@email.com')
-    }).unknown()
+    schema: validations.org
   },
   handler: handlers.postOrg
 }

@@ -11,15 +11,6 @@ glue.compose(config, {relativeTo: __dirname}, (err, server) => {
       throw err
     }
 
-    server.route({
-      method: 'GET',
-      path: '/',
-      config: {tags: ['api']},
-      handler: (request, reply) => {
-        reply('Hello world!')
-      }
-    })
-
     console.log(`Server running. Swagger UI at: ${server.info.uri}/documentation`)
   })
 })
